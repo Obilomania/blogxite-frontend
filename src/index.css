@@ -9,10 +9,12 @@
   --dark-variant: #31265e;
   --light-variant: #353e83;
   --primary: #007bff;
+  --light-primary: #3b96f8;
   --secondary: #8db640;
+  --light-secondary: #a3be6f;
   --white: #fff;
   --dark: #333;
-  --grey: #eee;
+  --grey: #a1a0a0;
   --danger: rgb(250, 0, 0);
   --background:#efefef;
 }

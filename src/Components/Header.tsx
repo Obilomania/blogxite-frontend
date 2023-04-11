@@ -2,16 +2,45 @@ import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../Redux/store";
+import authInterface from "../Interfaces/authInterface";
+import { initialState, setLoggedInUser } from "../Redux/authSlice";
+import toastNotify from "../Helpers/toastNotify";
 
 let myLogo = require("../Assets/logo.png");
 
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [navBar, setNavBar] = useState(false);
   const [open, setOpen] = useState<any>(false);
   const handleCLick = () => setOpen(!open);
 
+  const changeNavBG = () => {
+    if (window.scrollY >= 80) {
+      setNavBar(true);
+    } else {
+      setNavBar(false);
+    }
+  };
+
+  window.addEventListener("scroll", changeNavBG);
+
+  const userData: authInterface = useSelector(
+    (state: RootState) => state.authStore
+  );
+
+  //LogOut function
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(setLoggedInUser({ ...initialState }));
+    toastNotify("Logout Successful");
+  };
+
   return (
-    <Nav>
-      <nav className="navigation">
+    <Nav className="active">
+      <nav className={navBar ? "navigation2" : "navigation"}>
         <div className="logo">
           <NavLink to="/">
             <img src={myLogo} alt="" />
@@ -20,12 +49,31 @@ const Header = () => {
         <ul className={open ? "nav-open" : "nav-close"}>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/">About</NavLink>
-          <NavLink to="/">Posts</NavLink>
-          <NavLink to="/">Recent Posts</NavLink>
-          <NavLink to="/">Recent Posts</NavLink>
-          <NavLink to="/">Login</NavLink>
-          <NavLink to="/">Logout</NavLink>
-          <NavLink to="/">Register</NavLink>
+          <NavLink to="/postUpsert">Create Post</NavLink>
+          <NavLink to="/postList">Posts</NavLink>
+          {userData.id && (
+            <>
+              <NavLink to="/">
+                Welcome{" "}
+                <span style={{ color: "var(--primary)", fontWeight: "bold" }}>
+                  {userData.fullName}!
+                </span>
+              </NavLink>
+              <button
+                className="log"
+                onClick={handleLogout}
+                style={{ border: "none", cursor: "pointer" }}
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {!userData.id && (
+            <>
+              <NavLink to="/login">Login</NavLink>
+              <NavLink to="/register">Register</NavLink>
+            </>
+          )}
         </ul>
         <div className="hamburger" onClick={handleCLick}>
           {open ? <FaTimes color="white" /> : <FaBars color="#8db640" />}
@@ -34,22 +82,25 @@ const Header = () => {
     </Nav>
   );
 };
-
 const Nav = styled.div`
   width: 100%;
   position: relative;
   z-index: 10;
   .navigation {
-    padding-top: 1.5rem;
+    position: fixed;
+    background: transparent;
+    top: 0;
     width: 100%;
+    height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5rem;
-    position: absolute;
+    transition: 400ms all ease-in-out;
     .logo img {
       width: 4rem;
     }
+
     ul {
       display: flex;
       align-items: center;
@@ -77,6 +128,73 @@ const Nav = styled.div`
     .hamburger {
       display: none;
     }
+    .log {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.6rem 2rem;
+      border-radius: 1.5rem;
+      transition: 400ms all ease-in-out;
+    }
+    .log:hover {
+      transition: 400ms all ease-in-out;
+      background: var(--light-primary);
+    }
+  }
+
+  //NAVIGATION 2
+  .navigation2 {
+    background: grey;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    transition: 400ms all ease-in-out;
+    .logo img {
+      width: 4rem;
+    }
+
+    ul {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5rem;
+      a {
+        text-decoration: none;
+        font-weight: 500;
+        color: var(--white);
+      }
+    }
+    ul a::after {
+      content: "";
+      width: 0%;
+      height: 2px;
+      background: var(--secondary);
+      display: block;
+      margin: auto;
+      transition: 0.3s;
+      margin-top: 0.3rem;
+    }
+    ul a:hover::after {
+      width: 100%;
+    }
+    .hamburger {
+      display: none;
+    }
+    .log {
+      background: var(--primary);
+      color: var(--white);
+      padding: 0.6rem 2rem;
+      border-radius: 1.5rem;
+      transition: 400ms all ease-in-out;
+    }
+    .log:hover {
+      transition: 400ms all ease-in-out;
+      background: var(--light-primary);
+    }
   }
 
   @media screen and (max-width: 940px) {
@@ -99,7 +217,7 @@ const Nav = styled.div`
         z-index: 10;
         cursor: pointer;
         font-size: 1.5rem;
-        color:var(--secondary);
+        color: var(--secondary);
       }
       .nav-open {
         position: absolute;
