@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const AddCommentForm = () => {
+
+
+const AddCommentForm = (addComment: any,
+    handleInputChange : any,
+    handleSubmit : any
+) => {
   return (
     <CommentForm>
       <div className="commentForm">
-        <form action="post">
+        <form onSubmit={handleSubmit}>
           <input type="text" readOnly hidden name="userId" />
           <input type="text" hidden name="id" readOnly />
           <textarea

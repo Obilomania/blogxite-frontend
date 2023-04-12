@@ -9,9 +9,12 @@ const commentApi = createApi({
     tagTypes: ["comment"],
     endpoints: (builder) => ({
         createComment: builder.mutation({
-            query: ({ data}) => ({
+            query: (data) => ({
                 url: `comment`,
                 method: "POST",
+                headers: {
+                    "Content-type" :"application/json",
+                },
                 body: data,
             }),
             invalidatesTags: ["comment"],

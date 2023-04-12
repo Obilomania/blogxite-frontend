@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { SD_Roles } from "../Utility/SD";
 import inputHelpers from "../Helpers/inputHelpers";
@@ -11,6 +11,7 @@ import toastNotify from "../Helpers/toastNotify";
 let loginBg = require("../Assets/loginBG.jpg");
 
 const Register = () => {
+  const navigate = useNavigate()
   const [registerUser] = useRegisterUserMutation();
   const [loading, setLoading] = useState(false);
   const [userInput, setUserInput] = useState({
@@ -38,6 +39,7 @@ const Register = () => {
     });
     if (response.data) {
       toastNotify("Registration Successful!, please Log in to continue");
+      navigate("/login")
     } else if (response.error) {
       toastNotify(response.error.data.errorMessages[0]);
     }
@@ -89,14 +91,15 @@ const Register = () => {
               value={userInput.role}
               name="role"
               onChange={handleUserInput}
+              hidden
             >
-              <option value="">--Select Role--</option>
               <option value={`${SD_Roles.USER}`}>User</option>
-              <option value={`${SD_Roles.ADMIN}`}>Admin</option>
+              {/* <option value={`${SD_Roles.USER}`}>User</option>
+              <option value={`${SD_Roles.ADMIN}`}>Admin</option> */}
             </select>
           </div>
           <br /> <br />
-          <button style={{cursor:"pointer"}}>Register</button>
+          <button style={{ cursor: "pointer" }}>Register</button>
         </form>{" "}
         <br />
         <p

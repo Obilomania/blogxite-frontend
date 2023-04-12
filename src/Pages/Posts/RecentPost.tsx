@@ -14,7 +14,6 @@ const RecentPost = () => {
   useEffect(() => {
     if (!isLoading) {
       dispatch(setPosts(data.result));
-      console.log(data.result);
     }
   }, [isLoading]);
 
