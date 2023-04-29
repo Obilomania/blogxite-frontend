@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { withAuth } from "../HOC";
 
 
 
@@ -66,4 +67,4 @@ const CommentForm = styled.div`
     }
   }
 `;
-export default AddCommentForm;
+export default withAuth(AddCommentForm);

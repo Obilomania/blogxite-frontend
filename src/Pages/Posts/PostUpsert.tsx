@@ -4,7 +4,12 @@ import styled from "styled-components";
 import inputHelpers from "../../Helpers/inputHelpers";
 import toastNotify from "../../Helpers/toastNotify";
 import { useDispatch } from "react-redux";
-import { useCreatePostMutation, useGetPostByIdQuery, useUpdatePostMutation } from "../../Redux/Apis/postApi";
+import {
+  useCreatePostMutation,
+  useGetPostByIdQuery,
+  useUpdatePostMutation,
+} from "../../Redux/Apis/postApi";
+import { withAdminAuth } from "../../HOC";
 
 let loginBg = require("../../Assets/loginBG.jpg");
 
@@ -21,19 +26,19 @@ const PostUpsert = () => {
   const [loading, setLoading] = useState(false);
   const [updatePost] = useUpdatePostMutation();
   const [createPost] = useCreatePostMutation();
-  const {data} = useGetPostByIdQuery(id)
+  const { data } = useGetPostByIdQuery(id);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (data && data.result) {
       const tempData = {
         title: data.result.title,
-        content: data.result.content, 
+        content: data.result.content,
       };
-      setPostInputs(tempData)
+      setPostInputs(tempData);
       setImagePreview(data.result.imageUrl);
     }
-  },[data])
+  }, [data]);
 
   const handlePostInput = (
     e: React.ChangeEvent<
@@ -90,7 +95,7 @@ const PostUpsert = () => {
     if (id) {
       //update
       formData.append("Id", id);
-      response = await updatePost({id, data: formData });
+      response = await updatePost({ id, data: formData });
       toastNotify("Post updated successfully", "success");
     } else {
       //create
@@ -237,7 +242,7 @@ const Create = styled.div`
           color: white;
           border: 1px solid lightgrey;
           transition: 400ms all ease-in-out;
-          text-align:center;
+          text-align: center;
           &:hover {
             background: rgba(255, 255, 255, 0.8);
             color: rgba(0, 0, 0, 0.7);
@@ -288,4 +293,4 @@ const Create = styled.div`
     }
   }
 `;
-export default PostUpsert;
+export default withAdminAuth(PostUpsert);

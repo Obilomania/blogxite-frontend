@@ -17,15 +17,15 @@ const Header = () => {
   const [open, setOpen] = useState<any>(false);
   const handleCLick = () => setOpen(!open);
 
-  const changeNavBG = () => {
-    if (window.scrollY >= 80) {
-      setNavBar(true);
-    } else {
-      setNavBar(false);
-    }
-  };
+  // const changeNavBG = () => {
+  //   if (window.scrollY >= 80) {
+  //     setNavBar(true);
+  //   } else {
+  //     setNavBar(false);
+  //   }
+  // };
 
-  window.addEventListener("scroll", changeNavBG);
+  // window.addEventListener("scroll", changeNavBG);
 
   const userData: authInterface = useSelector(
     (state: RootState) => state.authStore
@@ -35,7 +35,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(setLoggedInUser({ ...initialState }));
-    navigate("/")
+    navigate("/");
     toastNotify("Logout Successful");
   };
 
@@ -48,13 +48,18 @@ const Header = () => {
           </NavLink>
         </div>
         <ul className={open ? "nav-open" : "nav-close"}>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/">About</NavLink>
-          <NavLink to="/postUpsert">Create Post</NavLink>
-          <NavLink to="/postList">Posts</NavLink>
+          <NavLink to="/" onClick={handleCLick}>Home</NavLink>
+          <NavLink to="/about" onClick={handleCLick}>About</NavLink>
+          <NavLink to="/contact" onClick={handleCLick}>Contact</NavLink>
+          {userData.role === "admin" && (
+            <>
+              <NavLink to="/postUpsert" onClick={handleCLick}>Create Post</NavLink>
+              <NavLink to="/postList" onClick={handleCLick}>Posts</NavLink>
+            </>
+          )}
           {userData.id && (
             <>
-              <NavLink to="/">
+              <NavLink to="/" onClick={handleCLick}>
                 Welcome{" "}
                 <span style={{ color: "var(--primary)", fontWeight: "bold" }}>
                   {userData.fullName}!
@@ -71,13 +76,13 @@ const Header = () => {
           )}
           {!userData.id && (
             <>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
+              <NavLink to="/login" onClick={handleCLick}>Login</NavLink>
+              <NavLink to="/register" onClick={handleCLick}>Register</NavLink>
             </>
           )}
         </ul>
         <div className="hamburger" onClick={handleCLick}>
-          {open ? <FaTimes color="white" /> : <FaBars color="#8db640" />}
+          {open ? <FaTimes color="#8db640" /> : <FaBars color="#8db640" />}
         </div>
       </nav>
     </Nav>
@@ -88,29 +93,28 @@ const Nav = styled.div`
   position: relative;
   z-index: 10;
   .navigation {
-    position: fixed;
-    background: transparent;
-    top: 0;
+    background: var(--background);
     width: 100%;
-    height: 80px;
+    height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5rem;
-    transition: 400ms all ease-in-out;
+    /* border-bottom: 3px solid var(--light-variant); */
     .logo img {
-      width: 4rem;
+      width: 5rem;
     }
 
     ul {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5rem;
+      margin-top:2rem;
+      gap: 10rem;
       a {
         text-decoration: none;
-        font-weight: 500;
-        color: var(--white);
+        font-weight: 600;
+        color: var(--light-variant);
       }
     }
     ul a::after {
@@ -209,7 +213,6 @@ const Nav = styled.div`
       justify-content: space-between;
       align-items: center;
       gap: 5rem;
-      position: absolute;
       .logo img {
         width: 4rem;
       }
@@ -222,7 +225,7 @@ const Nav = styled.div`
       }
       .nav-open {
         position: absolute;
-        top: 0;
+        top: 5vh;
         left: 0;
         height: 100vh;
         width: 100%;
@@ -237,7 +240,7 @@ const Nav = styled.div`
       }
       .nav-close {
         position: absolute;
-        top: 0;
+        top: 5vh;
         left: -100%;
         height: 100vh;
         width: 100%;

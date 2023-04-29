@@ -16,6 +16,8 @@ import AccessDenied from "./Pages/AccessDenied";
 import PostList from "./Pages/Posts/PostList";
 import PostUpsert from "./Pages/Posts/PostUpsert";
 import Footer from "./Layout/Footer";
+import About from "./Pages/About";
+import Contact from "./Pages/Contact";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +36,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/postDetail/:id" element={<PostDetail />} />
         <Route path="/postUpsert/:id" element={<PostUpsert />} />
         <Route path="/postUpsert" element={<PostUpsert />} />
@@ -47,7 +51,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
-      <Footer/>
+      {/* <Footer/> */}
     </BrowserRouter>
   );
 }

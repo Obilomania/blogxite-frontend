@@ -1,18 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 import RecentPost from "../Pages/Posts/RecentPost";
+import Carousel from "react-bootstrap/Carousel";
 
-let homeBG = require("../Assets/BG1.jpg");
+let image1 = require("../Assets/BLogXite1.png");
+let image2 = require("../Assets/BLogXite2.png");
 
 const Landing = () => {
   return (
     <Home>
-      <section className="landingPage">
-        <div className="overlay"></div>
-        <img src={homeBG} alt="" className="landingBG" />
-      </section>
-
-      {/* Recent Post Section */}
+      <div className="container">
+        <Carousel fade indicators={false} controls={false}>
+          <Carousel.Item>
+            <img className="d-block w-100" src={image1} alt="First slide" />
+          </Carousel.Item>
+        </Carousel>
+      </div>
       <RecentPost />
     </Home>
   );
@@ -20,28 +23,8 @@ const Landing = () => {
 
 const Home = styled.div`
   width: 100%;
-  height: fit-content;
-  .landingPage {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-  }
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2;
-  }
-  .landingBG {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    z-index: 1;
-  }
+  min-height: 100vh;
+  background: var(--background);
+
 `;
 export default Landing;
